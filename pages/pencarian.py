@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 from component.styles import load_css
 from model.retrieval import retrieve_documents
 
@@ -7,6 +8,13 @@ load_css()
 
 
 def show_pencarian():
+    if "search_input_version" not in st.session_state:
+        st.session_state.search_input_version = 0
+
+    search_input_key = (
+        f"search_query_input_{st.session_state.search_input_version}"
+    )
+
     if "selected_news" not in st.session_state:
         st.session_state.selected_news = None
 
@@ -15,6 +23,10 @@ def show_pencarian():
 
     if "query" not in st.session_state:
         st.session_state.query = ""
+
+    quick_query = st.session_state.pop("quick_query", None)
+    if quick_query is not None:
+        st.session_state[search_input_key] = quick_query
 
     st.markdown(
         """
@@ -29,13 +41,10 @@ def show_pencarian():
 
     col_query, col_topk = st.columns([3.2, 1])
     with col_query:
-        default_query = st.session_state.get("quick_query", "")
-
         query = st.text_input(
             " ",
-            value=default_query,
             placeholder="Masukkan kata kunci..",
-
+            key=search_input_key,
         )
     with col_topk:
         top_k = st.selectbox("Top-K", [5, 10, 15])
@@ -47,10 +56,9 @@ def show_pencarian():
 
         st.session_state.query = query
         
-    if st.session_state.get("quick_query"):
+    if quick_query is not None:
         st.session_state.hasil = retrieve_documents(query, top_k)
         st.session_state.query = query
-        del st.session_state["quick_query"]
 
     hasil = st.session_state.get("hasil", [])
     query = st.session_state.get("query", "")
@@ -94,6 +102,42 @@ def show_pencarian():
 @st.dialog("Detail Berita")
 def show_detail(item):
     st.session_state.selected_news = item
+
+    components.html(
+        """
+        <script>
+        const resetDialogScroll = () => {
+            try {
+                const parentDocument = window.parent.document;
+                const dialog =
+                    parentDocument.querySelector('[data-testid="stDialog"]') ||
+                    parentDocument.querySelector('[role="dialog"]');
+
+                if (!dialog) return;
+
+                dialog.scrollTop = 0;
+                dialog.querySelectorAll('*').forEach((element) => {
+                    const style = window.parent.getComputedStyle(element);
+                    const isScrollable =
+                        style.overflowY === 'auto' || style.overflowY === 'scroll';
+
+                    if (isScrollable) {
+                        element.scrollTop = 0;
+                    }
+                });
+            } catch (error) {
+                // The detail content still renders if browser iframe access is restricted.
+            }
+        };
+
+        window.requestAnimationFrame(resetDialogScroll);
+        window.setTimeout(resetDialogScroll, 100);
+        window.setTimeout(resetDialogScroll, 300);
+        </script>
+        """,
+        height=0,
+        width=0,
+    )
 
     st.markdown(
         f"""

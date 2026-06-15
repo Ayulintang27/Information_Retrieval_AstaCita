@@ -53,17 +53,20 @@ def show_dashboard():
     text_data = " ".join(df["stopword_removal"].dropna().astype(str))
 
     wordcloud = WordCloud(
-        width=1000,
-        height=450,
+        width=800,
+        height=350,
         background_color="white",
         collocations=False
     ).generate(text_data)
 
-    fig, ax = plt.subplots(figsize=(12, 5))
+    fig, ax = plt.subplots(figsize=(8, 3.5))
     ax.imshow(wordcloud, interpolation="bilinear")
     ax.axis("off")
 
-    st.pyplot(fig)
+    _, wordcloud_col, _ = st.columns([1, 4, 1])
+    with wordcloud_col:
+        st.pyplot(fig, use_container_width=True)
+    plt.close(fig)
 
     # =========================
     # DISTRIBUSI POIN
@@ -112,4 +115,3 @@ def show_dashboard():
 
     st.dataframe(keyword_counts)
 
-  

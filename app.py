@@ -8,6 +8,26 @@ load_css()
 if "menu" not in st.session_state:
     st.session_state.menu = "HOME"
 
+if "search_input_version" not in st.session_state:
+    st.session_state.search_input_version = 0
+
+
+def clear_search_state() -> None:
+    search_input_key = (
+        f"search_query_input_{st.session_state.search_input_version}"
+    )
+
+    for state_key in (
+        "hasil",
+        "query",
+        "selected_news",
+        search_input_key,
+        "quick_query",
+    ):
+        st.session_state.pop(state_key, None)
+
+    st.session_state.search_input_version += 1
+
 
 def nav_button(label: str, key: str) -> None:
     is_active = st.session_state.menu == key
@@ -17,6 +37,8 @@ def nav_button(label: str, key: str) -> None:
         type="primary" if is_active else "secondary",
         use_container_width=True,
     ):
+        if st.session_state.menu == "PENCARIAN" and key != "PENCARIAN":
+            clear_search_state()
         st.session_state.menu = key
         st.rerun()
 
