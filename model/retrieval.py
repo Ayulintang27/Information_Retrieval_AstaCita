@@ -70,7 +70,8 @@ def retrieve_documents(query, top_k=5):
                 "poin_id": datalink['poin_id'].iloc[i],
                 "keyword": datalink['keyword'].iloc[i],
                 "title": datalink['title'].iloc[i],
-                "text": datalink['text'].iloc[i]
+                "text": datalink['text'].iloc[i],
+                "url": datalink["url"].iloc[i],
 
             })
 

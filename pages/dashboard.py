@@ -1,6 +1,9 @@
 import streamlit as st
 from component.styles import load_css
 import pandas as pd
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
+
 
 df = pd.read_csv("data/data_bersih_final.csv")
 load_css()
@@ -8,7 +11,7 @@ load_css()
 def show_dashboard():
     st.markdown(
         """
-        <div class="eyebrow">Dashboard</div>
+        <div class="eyebrow">Insight Berita</div>
         <div class="page-title">Analisis Dataset</div>
         <div class="page-subtitle">
         Ringkasan statistik dan distribusi data pemberitaan Asta Cita.
@@ -42,6 +45,25 @@ def show_dashboard():
         )
 
     st.markdown("<br>", unsafe_allow_html=True)
+
+    # =========================
+    # WORDCLOUD
+    # =========================
+    st.subheader("Word Cloud Berita")
+    text_data = " ".join(df["stopword_removal"].dropna().astype(str))
+
+    wordcloud = WordCloud(
+        width=1000,
+        height=450,
+        background_color="white",
+        collocations=False
+    ).generate(text_data)
+
+    fig, ax = plt.subplots(figsize=(12, 5))
+    ax.imshow(wordcloud, interpolation="bilinear")
+    ax.axis("off")
+
+    st.pyplot(fig)
 
     # =========================
     # DISTRIBUSI POIN

@@ -413,6 +413,11 @@ def load_css():
             text-align: justify;
             word-break: break-word;
         }
+
+        .detail-source {
+            overflow-wrap: anywhere;
+        }
+
         div[data-testid="column"]{
         padding-left: 0.2rem !important;
         padding-right: 0.2rem !important;

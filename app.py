@@ -38,7 +38,7 @@ with st.sidebar:
 
     nav_button("🏠  Home", "HOME")
     nav_button("🔎  Pencarian", "PENCARIAN")
-    nav_button("📊  Dashboard", "DASHBOARD")
+    nav_button("📊  Insight Berita", "DASHBOARD")
 
 st.markdown('<span class="content-anchor"></span>', unsafe_allow_html=True)
 

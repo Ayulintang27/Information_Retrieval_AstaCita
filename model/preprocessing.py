@@ -132,7 +132,7 @@ def remove_stopwords(tokens):
 df['stopword_removal'] = df['tokens'].apply(remove_stopwords)
 
 #data setelah tahapan preprocessing
-df_final = df[['poin_id','date','title','text','clean_text','case_folding','stopword_removal']]
+df_final = df[['poin_id','date','title','text','clean_text','case_folding','stopword_removal','stem_text','url']]
 df_final.to_csv(
     'data/data_bersih.csv',
     index=False,

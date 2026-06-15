@@ -105,6 +105,10 @@ def show_detail(item):
             </div>
             <hr class="detail-divider">
             <p class="detail-text">{item['text']}</p>
+            <div class="detail-source">
+                Sumber Berita:
+                <a href="{item['url']}" target="_blank" class="detail-link">{item['url']}</a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True,
